@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Portfolio</h1>
+    {% for portfolio in portfolios %}
+        <h2>{{ portfolio.title }}</h2>
+        <p>{{ portfolio.content }}</p>
+    {% endfor %}
+{% endblock %}
