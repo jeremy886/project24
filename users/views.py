@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
-from .forms import LoginForm
+from .forms import LoginForm, RegisterForm
+
 
 # Create your views here.
 def sign_in(request):
@@ -28,3 +29,21 @@ def sign_in(request):
 def sign_out(request):
     logout(request)
     return redirect("login")
+
+
+def sign_up(request):
+    if request.method == "GET":
+        form = RegisterForm()
+        return render(request, "users/register.html", {"form": form})
+
+    if request.method == "POST":
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.username = user.username.lower()
+            user.save()
+
+            login(request, user)
+            return redirect("portfolio")
+        else:
+            return render(request, "users/register.html", {"form": form})
